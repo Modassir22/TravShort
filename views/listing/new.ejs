@@ -1,0 +1,67 @@
+<% layout("/layouts/boilerplate") -%>
+    
+    <div class="row">
+    <div class="col-8 offset-2">
+      <br><br>
+      <h2>Create New Listing</h2>
+    <form method="POST" action="/listings">
+      <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input
+          id="title"
+          class="form-control"
+          name="listing[title]"
+          placeholder="Add a catchy title"
+          type="text"
+        />
+      </div class="mb-3">
+      <div>
+        <label for="description" class="form-label">Description</label>
+        <textarea
+        class="form-control"
+          id="description"
+          name="listing[description]"
+          placeholder="Enter description"
+        ></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="image" class="form-label">Image</label>
+        <input
+        class="form-control"
+          id="image"
+          name="listing[image]"
+          placeholder="Enter image URL/Link"
+          type="text"
+        />
+      </div>
+      <div class="row">
+        <div class="mb-3 col-md-4">
+          <label for="price" class="form-label">Price</label>
+          <input id="price" name="listing[price]" class="form-control" placeholder="₹1,200" type="number" />
+        </div>
+        <div class="mb-3 col-md-8">
+          <label for="country" class="form-label">Country</label>
+          <input
+          class="form-control"
+            id="country"
+            name="listing[country]"
+            placeholder="eg- India"
+            type="text"
+          />
+        </div>
+      </div>
+      
+      <div class="mb-3 ">
+        <label for="location" class="form-label">Location</label>
+        <input
+        class="form-control"
+          id="location"
+          name="listing[location]"
+          placeholder="eg- Bhilai, Durg"
+          type="text"
+        />
+      </div>
+        <button class="btn btn-dark">Add</button><br><br><br>
+    </form>
+  </div>
+</div>
