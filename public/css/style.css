@@ -53,8 +53,7 @@ body {
 
 
 /* cards */
-.card {
-  width: 100%;
+.listing-card {
   border: none !important;
   margin-bottom: 2rem;
 }
@@ -86,6 +85,13 @@ body {
     width: 5rem !important;
 }
 
+.btn-rating{
+  background-color: white !important;
+  border: 1px solid black  !important;
+}
+.btn-rating:hover{
+ background-color:rgb(44, 43, 43) !important;
+}
 .show-img{
   height: 30vh;
 }
