@@ -96,14 +96,46 @@ body {
   height: 30vh;
 }
 
+.btn-dark{
+  background-color: rgb(44, 43, 43) !important;;
+}
+
+.btn-success{
+background-color: #128a26 !important;
+}
+
+.btn-dark:hover{
+  background-color: rgba(44, 43, 43,0.7) !important;
+}
 /* Show details */
 .btns{
   display: flex;
 
+}
+.edit-btn{
+  color: #fff !important;
+}
+.edit-btn:hover{
+  opacity:0.7 !important;
 }
 .delete-btn{
   background-color: rgb(44, 43, 43) !important;
 }
 .show-card {
   padding-left: 0 !important
+}
+
+.s-btn{
+  background-color: #2ebb51 !important;
+  color: white !important;
+}
+.f-btn{
+  background-color: #bb2c2c !important;
+  color: white !important;
+  margin-right: 5px;
+}
+@media (max-width:760px) {
+  .nav{
+    background-color: #fff !important;
+  }
 }
