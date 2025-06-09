@@ -1,0 +1,228 @@
+<% layout("/layouts/boilerplate") -%>
+<div class="row mt-3">
+  <div class="col-8 offset-3">
+    <h3><%= listing.title %></h3>
+  </div>
+
+  <div class="card col-6 offset-3 show-card listing-card">
+    <img
+      src="<%= (listing.image.url || listing.image) %>"
+      class="card-img-top show-img"
+      alt="listing-image"
+    />
+    <div class="card-body show-card">
+      <p class="card-text">
+        <b>Owned By </b> :<i><%= listing.owner.username %></i><br />
+        <%= listing.description %><br />
+        &#8377;<%= listing.price.toLocaleString("en-IN") %><br />
+        <%= listing.location %><br />
+        <%= listing.country %>
+      </p>
+    </div>
+  </div>
+
+  <% if(currUser && currUser._id.equals(listing.owner._id)){ %>
+  <div class="btns">
+    <a
+      class="btn edit-btn edit-btn col-1 offset-3"
+      href="/listings/<%= listing._id %>/edit"
+      >Edit</a
+    >
+    <form method="post" action="/listings/<%=  listing._id %>?_method=DELETE">
+      <button class="btn btn-dark offset-4 delete-btn">Delete</button>
+    </form>
+  </div>
+  <% } %>
+  <div class="col-8 offset-3">
+    <hr />
+    <% if(currUser) {%>
+    <h4>Drop a Review</h4>
+    <form
+      action="/listings/<%= listing._id %>/reviews"
+      method="post"
+      class="needs-validation"
+      novalidate
+    >
+      <div class="mb-3 mt-3">
+        <label for="rating" class="form-label"><b>Rating</b></label>
+        <fieldset class="starability-slot">
+          <input
+            type="radio"
+            id="no-rate"
+            class="input-no-rate"
+            name="review[rating]"
+            value="1"
+            checked
+            aria-label="No rating."
+          />
+          <input
+            type="radio"
+            id="first-rate1"
+            name="review[rating]"
+            value="1"
+          />
+          <label for="first-rate1" title="Terrible">1 star</label>
+          <input
+            type="radio"
+            id="first-rate2"
+            name="review[rating]"
+            value="2"
+          />
+          <label for="first-rate2" title="Not good">2 stars</label>
+          <input
+            type="radio"
+            id="first-rate3"
+            name="review[rating]"
+            value="3"
+          />
+          <label for="first-rate3" title="Average">3 stars</label>
+          <input
+            type="radio"
+            id="first-rate4"
+            name="review[rating]"
+            value="4"
+          />
+          <label for="first-rate4" title="Very good">4 stars</label>
+          <input
+            type="radio"
+            id="first-rate5"
+            name="review[rating]"
+            value="5"
+          />
+          <label for="first-rate5" title="Amazing">5 stars</label>
+        </fieldset>
+        <div class="mb-3 mt-3">
+          <label for="comment" class="form-label">Comment</label>
+          <textarea
+            name="review[comment]"
+            id="comment"
+            cols="30"
+            rows="5"
+            class="form-control"
+            required
+          ></textarea>
+          <div class="invalid-feedback">Please drop the comment!</div>
+        </div>
+      </div>
+      <button class="btn-rating btn btn-outline-dark">Submit</button>
+    </form>
+
+    <% } %> <% if(listing.reviews.length > 0) {%>
+    <div class="row">
+      <p><b>All Reviews</b></p>
+      <% for( review of listing.reviews){ %>
+      <div class="card col-5 mb-3 ms-2">
+        <div class="card-body">
+          <h5 class="card-title"><%= review.author.username %></h5>
+          <p
+            class="starability-result card-text"
+            data-rating="<%= review.rating %>"
+          ></p>
+          <p class="card-text">Comment: <%= review.comment %></p>
+          <form
+            class="mb-3"
+            method="post"
+            action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE"
+          >
+            <button type="delete" class="btn btn-sm btn-dark">Delete</button>
+          </form>
+        </div>
+      </div>
+      <% } %>
+    </div>
+    <% } %>
+    <hr />
+  </div>
+  <div class="col-8 offset-3 mb-3">
+    <h4>Where you'll be</h4>
+    <div id="map"></div>
+  </div>
+</div>
+<br /><br />
+
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+  crossorigin=""
+></script>
+<script>
+    const listing = <%- JSON.stringify(listing) %>;
+    let long = listing.geometry.coordinates[0];
+    let lat = listing.geometry.coordinates[1];
+    var map = L.map("map").setView([lat,long], 13);
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution:
+        '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }).addTo(map); 
+
+  const osmStreet = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+        attribution: '© OpenStreetMap contributors'
+      });
+
+  const esriSatellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    maxZoom: 19,
+    attribution: '© Esri, Maxar, Earthstar Geographics'
+      });
+
+      const cartoDark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        maxZoom: 19,
+        attribution: '© CartoDB'
+      });
+
+        const baseMaps = {
+        "Street (OSM)": osmStreet,
+        "Satellite (Esri)": esriSatellite,
+        "Dark (Carto)": cartoDark
+      };
+
+      L.control.layers(baseMaps).addTo(map);
+
+    const defaultIcon = new L.Icon({
+    iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
+    shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41],
+  });
+
+
+
+    var marker = L.marker([lat,long],{ icon: defaultIcon }).addTo(map);
+    var circle = L.circle([lat,long], {
+      color: "red",
+      fillColor: "lime",
+      fillOpacity: 0.5,
+      radius: 100,
+    }).addTo(map);
+    var polygon = L.polygon([
+      [51.509, -0.08],
+      [51.503, -0.06],
+      [51.51, -0.047],
+    ]).addTo(map);
+
+    marker.on("mouseover", function (e) {
+      marker.bindPopup("Exact location provided after booking").openPopup();
+    });
+
+    // Hide popup when mouse leaves
+    marker.on("mouseout", function (e) {
+     this.closePopup();
+    });
+
+
+    circle.bindPopup("I am a circle.");
+    polygon.bindPopup("I am a polygon.");
+    var popup = L.popup();
+
+    function onMapClick(e) {
+      popup
+        .setLatLng(e.latlng)
+        .setContent("You clicked the map at " + e.latlng.toString())
+        .openOn(map);
+    }
+
+    map.on("click", onMapClick);
+</script>

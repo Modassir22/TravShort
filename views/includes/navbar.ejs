@@ -1,0 +1,61 @@
+<style>
+  .search-btn{
+    background-color:#fe424d ;
+    color: white;
+    width: 6.5rem !important;
+    border-radius: 25px !important;
+    padding: 0 1rem 0 1rem;
+  }
+  .search-btn:hover{
+    background-color:fe424d;
+    color: white;
+  }
+  .search-btn i{
+    display: inline;
+    margin-right: 0.4rem;
+  }
+  input.form-control:focus {
+  border-color: black !important;
+  box-shadow: none !important; 
+}
+.search-inp{
+  border-radius: 25px;
+  padding: 0.5rem 3rem 0.5rem 3rem;
+}
+</style>
+<nav class="navbar navbar-expand-md bg-body-tertiary border-bottom sticky-top ">
+  <div class="container-fluid">
+    <a class="navbar-brand " href="/"><i class="fa-solid fa-compass"></i></a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNavAltMarkup"
+    
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse nav" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link " aria-current="page" href="/listings">Explore</a>
+        <a class="nav-link" href="/listings/new">Add new Listings</a>
+      </div>
+      <div class="navbar-nav ms-auto">
+        <form class="d-flex" role="search">
+      <input class="form-control me-2 search-inp" type="search" placeholder="Search destination" aria-label="Search"/>
+      <button class="btn search-btn" type="submit">
+        <i class="fa-solid fa-magnifying-glass"></i>Search</button>
+    </form>
+      </div>
+      <div class="navbar-nav ms-auto">
+        <% if(!currUser){ %>
+        <a class="nav-link btn btn-success s-btn" aria-current="page" href="/login"><b>Log in</b></a>
+        <a class="nav-link btn btn-success ms-2 s-btn" href="/signup"><b>Sign up</b></a>
+        <% } %>
+        <% if(currUser){ %>
+        <a class="nav-link btn btn-secondary f-btn" href="/logout"><b>LogOut</b></a>
+          <% } %>
+      </div>
+    </div>
+  </div>
+</nav>
