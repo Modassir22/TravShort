@@ -74,7 +74,6 @@ app.use((req,res,next)=> {
     next();
 })
 
-// const MONGO_URL = "mongodb://127.0.0.1:27017/TravShort";
 
 
 main().then(()=>{
